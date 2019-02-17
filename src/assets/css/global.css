@@ -1,5 +1,16 @@
-html,body,#app{
-  height:100%;
-  margin:0;
-  padding:0;
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* 给home左侧功能按钮字体设置样式 */
+.el-menu-item,
+.el-submenu__title {
+  font-size: 13px;
+}
+/* 给左侧功能按钮图标设置样式 */
+i.iconfont {
+  margin-right: 10px;
 }
