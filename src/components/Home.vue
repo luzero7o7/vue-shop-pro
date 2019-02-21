@@ -8,7 +8,8 @@
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
     <el-container>
-      <el-aside width="menyshow? '65px':'200px'">
+      <!-- aside侧边栏 -->
+      <el-aside :width="menushow? '65px':'200px'">
         <div
           style="height:25px;color:white;text-align:center;linhight:25px;background-color:rgb(74,80,100);font-size:12px;letter-spacing:0.1em;user-select:none;"
           @click="menushow=!menushow"
@@ -17,27 +18,29 @@
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409EFF"
-          :style="menushow?'width:65px;':'width:200px;'"
           :collapse="menushow"
           :collapse-transition="false"
           :unique-opened="true"
+          :router="true"
         >
-          <el-submenu :index="item.id+''" v-for="(item,k) in menuList" :key="item.id">
+          <el-submenu
+            :index="item.id+''"
+            v-for="(item,k) in menuList"
+            :key="item.id"
+            :style="menushow?'width:65px;':'width:200px;'"
+          >
             <template slot="title">
               <i :class="'iconfont icon-'+menuicon[k]"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item
-              :index="item.id+'-'+item2.id"
-              v-for="item2 in item.children"
-              :key="item2.id"
-            >
+            <el-menu-item :index="item2.path" v-for="item2 in item.children" :key="item2.id">
               <i class="el-icon-menu"></i>
               <span>{{item2.authName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
+      <!-- main中间栏 -->
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -47,7 +50,7 @@
 
 <script>
 export default {
-  // 声明周期函数
+  // 生命周期函数
   created() {
     this.getMenuList()
   },
@@ -55,13 +58,14 @@ export default {
     return {
       menushow: false,
       menuList: [],
-      menuicon: ['user', 'tijikongjian', 'shangpin', 'danju', 'baobiao']
+      menuicon: ['users', 'tijikongjian', 'shangpin', 'danju', 'baobiao']
     }
   },
   methods: {
     // 获取左侧列表数据
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
+      console.log(res)
       if (res.meta.status !== 200) {
         return this.$message.error(res.meta.msg)
       }
